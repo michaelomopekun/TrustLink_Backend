@@ -17,7 +17,25 @@ const options =
                 url: "http://localhost:5000",
                 description: "Development server"
             }
-        ]
+        ],
+        components: 
+        {
+            securitySchemes:
+            {
+                bearerAuth:
+                {
+                    type:"http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                    description: "Enter your JWT token ",
+                }
+            }
+        },
+        security:[
+            {
+                bearerAuth: [],
+            }
+        ],
     },
     apis: ["./index.ts","./src/routes/*.ts", "./src/config/docs/*.ts"]
 };
