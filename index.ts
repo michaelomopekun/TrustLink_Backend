@@ -1,14 +1,20 @@
 import express from "express";
 import { dbConnect } from "./src/config/db/mongo";
 import dotenv from "dotenv";
+import { swaggerDocs } from "./src/config/swagger";
 // import { start } from "repl";
 
 dotenv.config();
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("TrustLink Backend is up and running😏");
+
+swaggerDocs(app, Number(process.env.PORT) || 5000);
+
+
+
+app.get("/healthcheck", (req, res) => {
+  res.status(200).send("TrustLink Backend is up and running😏");
 })
 
 const PORT = process.env.PORT || 5000;
