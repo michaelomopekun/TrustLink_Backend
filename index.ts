@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { swaggerDocs } from "./src/config/swagger";
 import cors from 'cors';
 import { verifyToken } from "./src/middleware/jwt";
+import router from "./src/routes/auth_route";
 // import helmet from 'helmet';
 // import { start } from "repl";
 
@@ -12,10 +13,14 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
 swaggerDocs(app, Number(process.env.PORT) || 5000);
+
+app.use("/api/auth", router);
+
 
 
 app.get("/healthcheck", (req, res) => {
