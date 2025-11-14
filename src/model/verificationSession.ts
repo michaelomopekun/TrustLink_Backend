@@ -11,18 +11,18 @@ const verificationSessionSchema = new Schema(
 
         status: 
         {
-        type: String,
-        enum: ["pending", "completed"],
-        default: "pending",
+            type: String,
+            enum: ["pending", "completed"],
+            default: "pending",
         },
 
-        // All trust signals stored here
+        // All trust signals are stored here
         signals: 
         {
             type: Object,
             default: {},
 
-            // Sub-schemas (optional)
+            // Sub-schemas, they are optional sha
             device: 
             {
                 ip: String,

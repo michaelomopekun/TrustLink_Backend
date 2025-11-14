@@ -90,3 +90,97 @@
  *                   type: string
  *                   example: failed to create verification session
  */
+
+
+/**
+ * @swagger
+ * /api/verification-session/device-signals/{sessionId}:
+ *   post:
+ *     summary: add device signals for a verification session
+ *     description: Retrieves and analyzes device signals (IP, user agent, VPN detection, device hash) for an active verification session
+ *     tags:
+ *       - Verification Session
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: sessionId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The verification session ID
+ *         example: 507f1f77bcf86cd799439011
+ *     responses:
+ *       200:
+ *         description: Device signals retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 signals:
+ *                   type: object
+ *                   properties:
+ *                     ip:
+ *                       type: string
+ *                       description: User's IP address
+ *                       example: 192.168.1.1
+ *                     userAgent:
+ *                       type: string
+ *                       description: Browser user agent string
+ *                       example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+ *                     deviceHash:
+ *                       type: string
+ *                       description: SHA256 hash of IP + user agent for device identification
+ *                       example: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+ *                     vpnDetected:
+ *                       type: boolean
+ *                       description: Whether VPN/proxy detected
+ *                       example: false
+ *                     score:
+ *                       type: number
+ *                       description: Device trust score (-50 to 20)
+ *                       example: 20
+ *                 message:
+ *                   type: string
+ *                   example: device signals retrieved successfully
+ *       400:
+ *         description: Bad Request - Insufficient data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: insufficient data to retrieve device signals
+ *       401:
+ *         description: Unauthorized - No or invalid authentication token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Not Found - Verification session not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: verification session not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: failed to retrieve device signals
+ */

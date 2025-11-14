@@ -8,4 +8,6 @@ const verificationSessionController = new VerificationSessionController();
 
 router.post("/create", verifyToken, (req: Request, res: Response) => verificationSessionController.createVerificationSession(req, res));
 
+router.post("/device-signals/:sessionId", verifyToken, (req: Request, res: Response) => verificationSessionController.addDeviceSignals(req, res));
+
 export default router;
