@@ -100,22 +100,22 @@ export class AuthController
      }
 
 
-     async logout(res: Response)
-     {
-        try
-        {
-            res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
-            // res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "strict" });
+    //  async logout(res: Response)
+    //  {
+    //     try
+    //     {
+    //         res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
+    //         // res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "strict" });
 
-            console.log("✅User logged out successfully");
-            return res.status(200).json({ message: "logout successful" });
-        }
-        catch (error)
-        {
-            console.error("Error during logout:", error);
-            return res.status(500).json({ message: "logout failed" });
-        }
-     }
+    //         console.log("✅User logged out successfully");
+    //         return res.status(200).json({ message: "logout successful" });
+    //     }
+    //     catch (error)
+    //     {
+    //         console.error("Error during logout:", error);
+    //         return res.status(500).json({ message: "logout failed" });
+    //     }
+    //  }
     
 }
 

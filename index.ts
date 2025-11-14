@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { swaggerDocs } from "./src/config/swagger";
 import cors from 'cors';
 import { verifyToken } from "./src/middleware/jwt";
-import router from "./src/routes/auth_route";
+import routes from "./src/routes";
 // import helmet from 'helmet';
 // import { start } from "repl";
 
@@ -19,9 +19,9 @@ app.use(cors());
 
 swaggerDocs(app, Number(process.env.PORT) || 5000);
 
-app.use("/api/auth", router);
+app.use("/api", routes);
 
-
+// app.use("/api/verification-session", router);
 
 app.get("/healthcheck", (req, res) => {
     console.log("TrustLink Backend is up and running😏");

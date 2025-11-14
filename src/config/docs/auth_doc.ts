@@ -110,27 +110,27 @@
  *         description: Login failed
  */
 
-/**
- * @swagger
- * /api/auth/logout:
- *   post:
- *     summary: Logout user
- *     tags:
- *       - Authentication
- *     security:
- *       - BearerAuth: []
- *     responses:
- *       200:
- *         description: Logout successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       401:
- *         description: Unauthorized - invalid or missing token
- *       500:
- *         description: Logout failed
- */
+// /**
+//  * @swagger
+//  * /api/auth/logout:
+//  *   post:
+//  *     summary: Logout user
+//  *     tags:
+//  *       - Authentication
+//  *     security:
+//  *       - BearerAuth: []
+//  *     responses:
+//  *       200:
+//  *         description: Logout successful
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 message:
+//  *                   type: string
+//  *       401:
+//  *         description: Unauthorized - invalid or missing token
+//  *       500:
+//  *         description: Logout failed
+//  */

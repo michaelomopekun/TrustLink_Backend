@@ -11,7 +11,10 @@ export const dbConnect = async () =>
     catch (error: any)
     {
         console.error(`MongoDB connection error: ${error.message}`);
-        process.exit(1);
+        // Retry connection after 5 seconds
+        console.log("Retrying MongoDB connection in 5 seconds...");
+        setTimeout(dbConnect, 5000);
+        dbConnect();
     }
 }
 
