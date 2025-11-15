@@ -2,9 +2,10 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 
-const isForwarded = process.env.FORWARDED === "true" || process.env.FORWARDED === "1";
+// let isForwarded: boolean = process.env.FORWARDED === "true" || process.env.FORWARDED === "1";
 
-const serverUrl = process.env.HOST;
+const forwardedServerUrl = "https://5fc8fpjp-5001.use2.devtunnels.ms";
+const localServerUrl = "http://localhost:5001";
 
 const options = 
 {
@@ -19,8 +20,12 @@ const options =
         },
         servers:[
             {
-                url: isForwarded ? serverUrl : `http://localhost:${process.env.PORT || 5001}`,
+                url: forwardedServerUrl,
                 description: "Development server"
+            },
+            {
+                url: localServerUrl,
+                description: "Local server"
             }
         ],
         components: 

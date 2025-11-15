@@ -3,7 +3,6 @@ import {VerificationSession} from "../model/verificationSession";
 import {User} from "../model/user";
 import { isVpnOrProxy } from "../util/vpnCheck";
 import { generateDeviceHash } from "../util/devicehash";
-import { get } from "axios";
 import { getIpLocation } from "../service/ipLocation.service";
 import { calculateDistance } from "../util/distance";
 
@@ -177,7 +176,7 @@ export class VerificationSessionController
                 score += 15;
                 confidence = "medium";
             }
-            else if(distance > 100)
+            else if(distance <= 100)
             {
                 score += 5;
                 confidence = "low";
@@ -199,7 +198,13 @@ export class VerificationSessionController
                     confidence,
                     score
                 }
-                };
+            };
+
+            await session.save();
+
+            await User.findByIdAndUpdate(userId, { $addToSet: { verifiedSignals: "location" } });
+
+            return res.status(200).json({ message: "Location signal added successfully",signal: session.signals.location });
         }
         catch(error)
         {
