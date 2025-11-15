@@ -185,12 +185,14 @@
  *                   example: failed to retrieve device signals
  */
 
+
+
 /**
  * @swagger
  * /api/verification-session/location-signals/{sessionId}:
  *   post:
  *     summary: Add location signals to verification session
- *     description: Captures and analyzes geolocation data (IP geolocation, timezone, country) for trust verification
+ *     description: Captures and analyzes geolocation data (GPS coordinates, IP geolocation, timezone, country) for trust verification
  *     tags:
  *       - Verification Session
  *     security:
@@ -204,11 +206,39 @@
  *         description: The verification session ID
  *         example: 507f1f77bcf86cd799439011
  *     requestBody:
- *       required: false
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - gpsLat
+ *               - gpsLng
+ *             properties:
+ *               gpsLat:
+ *                 type: number
+ *                 description: GPS latitude coordinate from user device
+ *                 example: 40.7128
+ *               gpsLng:
+ *                 type: number
+ *                 description: GPS longitude coordinate from user device
+ *                 example: -74.0060
+ *           examples:
+ *             default:
+ *               summary: New York Location
+ *               value:
+ *                 gpsLat: 40.7128
+ *                 gpsLng: -74.0060
+ *             london:
+ *               summary: London Location
+ *               value:
+ *                 gpsLat: 51.5074
+ *                 gpsLng: -0.1278
+ *             tokyo:
+ *               summary: Tokyo Location
+ *               value:
+ *                 gpsLat: 35.6762
+ *                 gpsLng: 139.6503
  *     responses:
  *       200:
  *         description: Location signals added successfully
@@ -220,43 +250,43 @@
  *                 signals:
  *                   type: object
  *                   properties:
- *                     ip:
- *                       type: string
- *                       description: User's IP address
- *                       example: 192.168.1.1
- *                     country:
- *                       type: string
- *                       description: Country code from IP geolocation
- *                       example: US
- *                     city:
- *                       type: string
- *                       description: City from IP geolocation
- *                       example: New York
- *                     timezone:
- *                       type: string
- *                       description: Timezone associated with location
- *                       example: America/New_York
- *                     latitude:
- *                       type: number
- *                       description: Geographic latitude
- *                       example: 40.7128
- *                     longitude:
- *                       type: number
- *                       description: Geographic longitude
- *                       example: -74.0060
- *                     isp:
- *                       type: string
- *                       description: Internet Service Provider name
- *                       example: Verizon Communications
- *                     score:
- *                       type: number
- *                       description: Location trust score (-30 to 15)
- *                       example: 15
+ *                     location:
+ *                       type: object
+ *                       properties:
+ *                         gpsLat:
+ *                           type: number
+ *                           description: GPS latitude from client
+ *                           example: 40.7128
+ *                         gpsLng:
+ *                           type: number
+ *                           description: GPS longitude from client
+ *                           example: -74.0060
+ *                         ipLat:
+ *                           type: number
+ *                           description: Latitude from IP geolocation
+ *                           example: 40.7143
+ *                         ipLng:
+ *                           type: number
+ *                           description: Longitude from IP geolocation
+ *                           example: -74.0060
+ *                         gpsToIpDistance:
+ *                           type: number
+ *                           description: Distance in kilometers between GPS and IP location
+ *                           example: 0.5
+ *                         confidence:
+ *                           type: string
+ *                           enum: [high, medium, low, suspicious]
+ *                           description: Confidence level of location match
+ *                           example: high
+ *                         score:
+ *                           type: number
+ *                           description: Location trust score (-10 to 20)
+ *                           example: 20
  *                 message:
  *                   type: string
  *                   example: location signals added successfully
  *       400:
- *         description: Bad Request - Insufficient geolocation data
+ *         description: Bad Request - Missing GPS coordinates
  *         content:
  *           application/json:
  *             schema:
@@ -264,16 +294,9 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: insufficient geolocation data
+ *                   example: insufficient data to retrieve location signals, please provide GPS coordinates
  *       401:
  *         description: Unauthorized - No or invalid authentication token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  *       404:
  *         description: Not Found - Verification session not found or expired
  *         content:
@@ -293,5 +316,5 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: failed to add location signals
+ *                   example: failed to retrieve location signals
  */

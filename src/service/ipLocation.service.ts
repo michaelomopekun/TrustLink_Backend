@@ -3,7 +3,7 @@ import axios from "axios";
 export const getIpLocation = async (ip: string) => {
     try
     {
-        const token = process.env.IPSTACK_API_KEY;
+        const token = process.env.IPSTACK_TOKEN;
     
         const res = await axios.get<{ loc?: string; city?: string; region?: string; country?: string }>(`https://ipinfo.io/${ip}?token=${token}`);
     

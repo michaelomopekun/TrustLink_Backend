@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-swaggerDocs(app, Number(process.env.PORT) || 5000);
+swaggerDocs(app, Number(process.env.PORT) || 5001);
 
 app.use("/api", routes);
 
@@ -34,7 +34,7 @@ app.get("/protected", verifyToken, (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGOOSE_URI || "";
 console.log("⌚"+MONGO_URI);
 
