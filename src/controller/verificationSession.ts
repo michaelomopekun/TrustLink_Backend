@@ -3,6 +3,9 @@ import {VerificationSession} from "../model/verificationSession";
 import {User} from "../model/user";
 import { isVpnOrProxy } from "../util/vpnCheck";
 import { generateDeviceHash } from "../util/devicehash";
+import { get } from "axios";
+import { getIpLocation } from "../service/ipLocation.service";
+import { calculateDistance } from "../util/distance";
 
 declare global {
     namespace Express {
@@ -120,6 +123,89 @@ export class VerificationSessionController
             console.log("❌Error retrieving device signals:", error);
 
             res.status(500).json({message: "failed to retrieve device signals"});
+        }
+    }
+
+
+    async addLocationSignals(req: any, res: Response)
+    {
+        try
+        {
+            const userId = req.user.id;
+            const {sessionId} = req.params;
+            const {gpsLat, gpsLng} = req.body;
+
+            const session = await VerificationSession.findOne({_id: sessionId, userId, status: "pending"});
+            if(!session)
+            {
+                console.log("❌Verification session not found for user:", userId);
+
+                return res.status(404).json({message: "verification session not found"});
+            }
+
+            if(!gpsLat || !gpsLng)
+            {
+                console.log("❌Insufficient data to retrieve location signals for user, please provide GPS coordinates:", userId);
+
+                return res.status(400).json({message: "insufficient data to retrieve location signals, please provide GPS coordinates"});
+            }
+
+            const ip = req.headers["x-forwarded-for"] || req.ip;
+            const clientIp = Array.isArray(ip) ? ip[0] : ip;
+
+            const ipLocation = await getIpLocation(clientIp);
+
+            if(!ipLocation)
+            {
+                console.log("❌Failed to retrieve IP location for user:", userId);
+
+                return res.status(500).json({message: "failed to retrieve or detect IP location"});
+            }
+
+            const distance = await calculateDistance(gpsLat, gpsLng, ipLocation.lat, ipLocation.lng);
+
+            let score = 0;
+            let confidence = "low";
+
+            if(distance <= 5)
+            {
+                score += 20;
+                confidence = "high";
+            }
+            else if(distance <= 20)
+            {
+                score += 15;
+                confidence = "medium";
+            }
+            else if(distance > 100)
+            {
+                score += 5;
+                confidence = "low";
+            }
+            else
+            {
+                score -= 10;
+                confidence = "suspicious";
+            }
+
+            session.signals = {
+                ...session.signals,
+                location: {
+                    gpsLat,
+                    gpsLng,
+                    ipLat: ipLocation.lat,
+                    ipLng: ipLocation.lng,
+                    gpsToIpDistance: distance,
+                    confidence,
+                    score
+                }
+                };
+        }
+        catch(error)
+        {
+            console.log("❌Error retrieving location signals:", error);
+
+            res.status(500).json({message: "failed to retrieve location signals"});
         }
     }
 }
